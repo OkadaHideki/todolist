@@ -1,12 +1,14 @@
 <child-component @eventEmit="updateEvent" />
 <template>
-    <Datepicker v-model="date" format="yyyy/MM/dd/HH/mm" model-type="yyyy-MM-dd-HH-mm" placeholder="日付を選択してください"></Datepicker>
+    <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" model-type="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
     <div><textarea v-model="message" placeholder="文字を入力してください"></textarea></div>
     <button v-on:click="postdata">作成</button>
     <button v-on:click="view">更新</button>
     <div v-for='item in data' :key="item.id">
-      <div>{{ item.time }} {{ item.memo }}
-        <button v-on:click="putdata(item.id)">編集</button>
+      <div>
+        <Datepicker v-model="item.time" format="yyyy/MM/dd HH:mm" model-type="yyyy/MM/dd HH:mm" auto-apply></Datepicker>
+        <textarea v-model="item.memo"></textarea>
+        <button v-on:click="putdata(item.id, item.time, item.memo)">編集</button>
         <button v-on:click="deletedata(item.id)">削除</button>
       </div>
     </div>
@@ -22,7 +24,7 @@ let {data} = reactive(await useFetch('http://localhost:3200/posts'))
 const date = ref(new Date())
 const message = ref()
 const menu = ref(true)
- 
+
 async function postdata() {
   try {
     await fetch("http://localhost:3200/posts", {
@@ -36,12 +38,12 @@ async function postdata() {
   }
 }
 
-async function putdata(i){
+async function putdata(id, time, memo){
   try{
-    await fetch('http://localhost:3200/posts/'+String(i), {
+    await fetch('http://localhost:3200/posts/'+String(id), {
       method: "PUT",
       headers: { "Content-Type": "application/json"},
-      body: JSON.stringify({ time: date.value, memo: message.value})
+      body: JSON.stringify({ time: time, memo: memo})
     });
     await view();
   }catch(error){
