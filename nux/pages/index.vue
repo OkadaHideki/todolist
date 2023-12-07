@@ -1,6 +1,6 @@
 <child-component @eventEmit="updateEvent" />
 <template>
-    <Datepicker format="yyyy/MM/dd/HH/mm" model-type="yyyy-MM-dd-HH-mm" v-model="date" placeholder="日付を選択してください"></Datepicker>
+    <Datepicker v-model="date" format="yyyy/MM/dd/HH/mm" model-type="yyyy-MM-dd-HH-mm" placeholder="日付を選択してください"></Datepicker>
     <div><textarea v-model="message" placeholder="文字を入力してください"></textarea></div>
     <button v-on:click="postdata">作成</button>
     <button v-on:click="view">更新</button>
@@ -16,11 +16,13 @@
 import {ref, watch} from 'vue'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
+import List from './list.vue'
 
+let {data} = reactive(await useFetch('http://localhost:3200/posts'))
 const date = ref(new Date())
 const message = ref()
-let {data} = reactive(await useFetch('http://localhost:3200/posts'))
-
+const menu = ref(true)
+ 
 async function postdata() {
   try {
     await fetch("http://localhost:3200/posts", {
