@@ -1,12 +1,20 @@
 <child-component @eventEmit="updateEvent" />
 <template>
-    <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" model-type="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
+    <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
     <div><textarea v-model="message" placeholder="文字を入力してください"></textarea></div>
-    <button v-on:click="postdata">作成</button>
-    <button v-on:click="view">更新</button>
+      <button v-on:click="postdata">作成</button>
+      <button v-on:click="view">更新</button>
+    <div>並び替え
+      <select v-model="selected">
+        <option disabled value=""></option>
+        <option>旧</option>
+        <option>新規</option>
+        <option>日付</option>
+      </select>
+    </div>
     <div v-for='item in data' :key="item.id">
       <div>
-        <Datepicker v-model="item.time" format="yyyy/MM/dd HH:mm" model-type="yyyy/MM/dd HH:mm" auto-apply></Datepicker>
+        <Datepicker v-model="item.time" format="yyyy/MM/dd HH:mm" auto-apply></Datepicker>
         <textarea v-model="item.memo"></textarea>
         <button v-on:click="putdata(item.id, item.time, item.memo)">編集</button>
         <button v-on:click="deletedata(item.id)">削除</button>
