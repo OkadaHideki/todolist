@@ -33,18 +33,6 @@ async function add() {
   }
 }
 
-async function view() {
-  try {
-    const response = await useFetch("http://localhost:3200/posts")
-    const result = await response
-    data = await result.data
-    console.log("Success:", data)
-    message.value = ''
-  } catch (error) {
-    console.error("Error:", error)
-  }
-}
-
 async function deletedata(i) {
   try {
     const response = await
@@ -57,6 +45,18 @@ async function deletedata(i) {
   }
 }
 
-watch(data)
+async function view() {
+  try {
+    const response = await useFetch("http://localhost:3200/posts")
+    const result = await response
+    data = await result.data
+    console.log("Success:", data)
+    message.value = ''
+  } catch (error) {
+    console.error("Error:", error)
+  }
+}
+
+
 
 </script>
