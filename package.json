@@ -1,0 +1,6 @@
+{
+  "dependencies": {
+    "@nuxtjs/axios": "^5.13.6",
+    "@vuepic/vue-datepicker": "^7.3.0"
+  }
+}
