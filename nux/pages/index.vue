@@ -6,10 +6,10 @@
       <button v-on:click="view">更新</button>
     <div>並び替え
       <select v-model="selected">
-        <option disabled value=""></option>
-        <option>旧</option>
-        <option>新規</option>
-        <option>日付</option>
+        <option disabled></option>
+        <option value="0">旧追加</option>
+        <option value="1">新規追加</option>
+        <option value="2">旧日付</option>
       </select>
     </div>
     <div v-for='item in data' :key="item.id">
@@ -26,12 +26,11 @@
 import {ref, watch} from 'vue'
 import Datepicker from '@vuepic/vue-datepicker'
 import '@vuepic/vue-datepicker/dist/main.css'
-import List from './list.vue'
 
-let {data} = reactive(await useFetch('http://localhost:3200/posts'))
+let data = ref(await useFetch('http://localhost:3200/posts').data)
 const date = ref(new Date())
 const message = ref()
-const menu = ref(true)
+const selected = ref()
 
 async function postdata() {
   try {
@@ -59,9 +58,9 @@ async function putdata(id, time, memo){
   }
 }
 
-async function deletedata(i) {
+async function deletedata(id) {
   try {
-    await fetch('http://localhost:3200/posts/'+String(i), {
+    await fetch('http://localhost:3200/posts/'+String(id), {
         method: 'DELETE'
     })
     await view();
@@ -73,14 +72,26 @@ async function deletedata(i) {
 async function view() {
   try {
     const response = await useFetch("http://localhost:3200/posts")
-    data = await response.data
+    await data.value.splice(0)
+    data.value = response.data.value
     console.log("Success:", data)
-    message.value = ''
   } catch (error) {
     console.error("Error:", error)
   }
 }
 
+watch(selected, (i) => {
+  if(i == 0){
+    console.log("0",data.value.sort((a, b) => a.id - b.id))
+  }
+  else if(i == 1){
+    console.log("1",data.value.sort((a, b) => b.id - a.id))
+  }
+  else if(i == 2){
+    console.log("2",data.value.sort((a, b) => a.time.getTime() > b.time.getTime()))
+  }
+})
 
+console.log(data.value)
 
 </script>
