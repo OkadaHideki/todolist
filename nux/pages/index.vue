@@ -3,7 +3,7 @@
     <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
     <div><textarea v-model="message" placeholder="文字を入力してください"></textarea></div>
       <button v-on:click="postdata">作成</button>
-      <button v-on:click="view">更新</button>
+      <button v-on:click="getdata">更新</button>
     <div>並び替え
       <select v-model="selected">
         <option disabled></option>
@@ -32,6 +32,7 @@ let data = ref(await useFetch('http://localhost:3200/posts').data)
 const date = ref(new Date())
 const message = ref()
 const selected = ref()
+const deadline = ref("dead")
 
 async function postdata() {
   try {
@@ -40,7 +41,7 @@ async function postdata() {
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({ time: date.value, memo: message.value})
     });
-    await view();
+    await getdata();
   } catch (error) {
     console.error("Error:", error);
   }
@@ -53,7 +54,7 @@ async function putdata(id, time, memo){
       headers: { "Content-Type": "application/json"},
       body: JSON.stringify({ time: time, memo: memo})
     });
-    await view();
+    await getdata();
   }catch(error){
     console.error("Error:", error)
   }
@@ -64,13 +65,13 @@ async function deletedata(id) {
     await fetch('http://localhost:3200/posts/'+String(id), {
         method: 'DELETE'
     })
-    await view();
+    await getdata();
   }catch (error) {
     console.error("Error:", error)
   }
 }
 
-async function view() {
+async function getdata() {
   try {
     const response = await useFetch("http://localhost:3200/posts")
     data.value = response.data.value
@@ -95,3 +96,8 @@ watch(selected, (i) => {
   }
 })
 </script>
+<style>
+.dead{
+  color: red
+}
+</style>
