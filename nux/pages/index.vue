@@ -10,6 +10,7 @@
         <option value="0">旧追加</option>
         <option value="1">新規追加</option>
         <option value="2">旧日付</option>
+        <option value="3">新規日付</option>
       </select>
     </div>
     <div v-for='item in data' :key="item.id">
@@ -72,7 +73,6 @@ async function deletedata(id) {
 async function view() {
   try {
     const response = await useFetch("http://localhost:3200/posts")
-    await data.value.splice(0)
     data.value = response.data.value
     console.log("Success:", data)
   } catch (error) {
@@ -88,10 +88,10 @@ watch(selected, (i) => {
     console.log("1",data.value.sort((a, b) => b.id - a.id))
   }
   else if(i == 2){
-    console.log("2",data.value.sort((a, b) => a.time.getTime() > b.time.getTime()))
+    console.log("2",data.value.sort((a, b) => (new Date(a.time)).getTime() - (new Date(b.time)).getTime()))
+  }
+  else if(i == 3){
+    console.log("2",data.value.sort((a, b) => (new Date(b.time)).getTime() - (new Date(a.time)).getTime()))
   }
 })
-
-console.log(data.value)
-
 </script>
