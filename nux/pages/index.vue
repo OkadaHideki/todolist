@@ -37,7 +37,7 @@ let data = ref(await useFetch('http://localhost:3200/posts').data)
 const date = ref(new Date())
 const message = ref()
 const selected = ref()
-const donelist = ref()
+const donelist = ref(0)
 let color = ref("#f06060")
 
 
