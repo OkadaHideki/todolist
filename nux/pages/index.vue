@@ -14,14 +14,17 @@
         <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
         <v-textarea v-model="message"></v-textarea>
       </v-col>
-      <v-col cols="2" class="d-flex flex-row justify-center align-center">
+      <v-col cols="1" class="d-flex flex-row justify-center align-center">
         <v-btn color="#5DEB52" v-on:click="postdata">作成</v-btn>
         <v-btn color="#52EBB1" v-on:click="getdata">更新</v-btn>
       </v-col>
+      <v-col cols="1"></v-col>
     </v-row>
     <v-row>
-      <v-col><v-select v-model="selected" item-title="title" item-value="value" :items="sortmode"></v-select></v-col>
-      <v-col><v-select v-model="donelist" item-title="title" item-value="value" :items="checklist"></v-select></v-col>
+      <v-col cols="1"></v-col>
+      <v-col cols="5"><v-select v-model="selected" item-title="title" item-value="value" :items="sortmode"></v-select></v-col>
+      <v-col cols="5"><v-select v-model="donelist" item-title="title" item-value="value" :items="checklist"></v-select></v-col>
+      <v-col cols="1"></v-col>
     </v-row>
     <div v-for='item in data' :key="item.id">
       <div>
