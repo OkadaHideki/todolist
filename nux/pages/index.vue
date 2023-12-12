@@ -1,30 +1,35 @@
 <child-component @eventEmit="updateEvent" />
 <template>
-    <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
-    <div><textarea v-model="message" placeholder="文字を入力してください"></textarea></div>
-      <button v-on:click="postdata">作成</button>
-      <button v-on:click="getdata">更新</button>
-    <div>並び替え
-      <select v-model="selected">
-        <option disabled></option>
-        <option value="0">旧追加</option>
-        <option value="1">新規追加</option>
-        <option value="2">旧日付</option>
-        <option value="3">新規日付</option>
-      </select>
-    </div>
-    <div>
-      {{ donelist }}
-      <select v-model="donelist">リスト
-        <option value=0>未完了</option>
-        <option value=1>完了</option>
-      </select>
-    </div>
+  <v-app>
+    <v-app-bar color="#52EB7D">
+      <v-app-bar-title>
+        Todoリスト
+      </v-app-bar-title>
+    </v-app-bar>
+
+    <v-main>
+    <v-row>
+      <v-col cols="1"></v-col>
+      <v-col cols="9">
+        <Datepicker v-model="date" format="yyyy/MM/dd HH:mm" placeholder="日付を選択してください" auto-apply></Datepicker>
+        <v-textarea v-model="message"></v-textarea>
+      </v-col>
+      <v-col cols="2" class="d-flex flex-row justify-center align-center">
+        <v-btn color="#5DEB52" v-on:click="postdata">作成</v-btn>
+        <v-btn color="#52EBB1" v-on:click="getdata">更新</v-btn>
+      </v-col>
+    </v-row>
+    <v-row>
+      <v-col><v-select v-model="selected" item-title="title" item-value="value" :items="sortmode"></v-select></v-col>
+      <v-col><v-select v-model="donelist" item-title="title" item-value="value" :items="checklist"></v-select></v-col>
+    </v-row>
     <div v-for='item in data' :key="item.id">
       <div>
         <ListComp v-if="donelist==item.done" :data="item" @putdata="putdata" @deletedata="deletedata"/>
       </div>
     </div>
+  </v-main>
+  </v-app>
 </template>
 
 <script setup>
@@ -36,10 +41,19 @@ import ListComp from './list.vue'
 let data = ref(await useFetch('http://localhost:3200/posts').data)
 const date = ref(new Date())
 const message = ref()
-const selected = ref()
-const donelist = ref(0)
-let color = ref("#f06060")
-
+const selected = ref('0')
+const donelist = ref('0')
+let color = ref("#9752EB")
+const checklist = [
+  { title: '未完了', value: '0' },
+  { title: '完了済', value: '1' },
+];
+const sortmode = [
+  { title: '旧追加', value: '0' },
+  { title: '新規追加', value: '1' },
+  { title: '旧日付', value: '2' },
+  { title: '新規日付', value: '3' },
+];
 
 async function postdata() {
   try {
@@ -105,7 +119,7 @@ watch(selected, (i) => {
 })
 
 watch(donelist, (i) => {
-  i === "0" ? color.value = "#f06060" : color.value = "#ffffff"
+  i === "0" ? color.value = "#9752EB" : color.value = "#ffffff"
 })
 
 </script>
